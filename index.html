@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saarthi People OS — Working Demo</title>
+<style>
+:root{--navy:#0f172a;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;--bg:#f8fafc;--indigo:#4f46e5;--purple:#7c3aed;--green:#059669;--amber:#d97706;--red:#dc2626}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:9px 13px;font-weight:650;transition:.15s}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}.primary{background:var(--indigo);color:white}.primary:hover{background:#4338ca}.secondary{background:#eef2ff;color:#3730a3}.neutral{background:#f1f5f9;color:#334155}.success{background:#dcfce7;color:#166534}.danger{background:#fee2e2;color:#991b1b}.small{padding:6px 9px;font-size:12px}.muted{color:var(--muted)}.tiny{font-size:11px}.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:10;background:var(--navy);color:white;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;box-shadow:0 4px 14px #0f172a18}.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:19px}.logo{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--purple));font-size:20px}.brand small{display:inline-block;margin-left:5px;padding:2px 7px;border:1px solid #334155;border-radius:20px;color:#c4b5fd;font-size:10px;vertical-align:middle}.top-actions{display:flex;align-items:center;gap:8px}.top-actions select{max-width:190px;background:#1e293b;color:white;border:1px solid #475569;border-radius:9px;padding:8px}
+.layout{max-width:1320px;margin:auto;padding:22px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px}.sidebar,.panel,.card{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 7px #0f172a05}.sidebar{padding:14px;align-self:start;position:sticky;top:82px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.12em;color:#94a3b8;text-transform:uppercase;padding:10px}.nav{display:grid;gap:4px}.nav button{width:100%;display:flex;gap:10px;align-items:center;text-align:left;background:transparent;color:#475569;font-size:12px}.nav button.active{background:#eef2ff;color:#4338ca}.nav button:hover{background:#f1f5f9}.stats-mini{border-top:1px solid #f1f5f9;margin-top:18px;padding:12px 8px 2px}.statline{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-top:10px}.content{min-width:0}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}.pagehead h1{font-size:24px;line-height:1.2;margin:0 0 6px}.pagehead p{margin:0;color:var(--muted);font-size:12px}.hero{padding:24px;border-radius:17px;background:linear-gradient(115deg,#0f172a,#312e81,#4c1d95);color:white;margin-bottom:18px}.hero .eyebrow{color:#c4b5fd;padding:0}.hero h2{font-size:25px;margin:7px 0}.hero p{color:#dbeafe;margin:0;font-size:12px}.grid{display:grid;gap:14px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:17px;min-width:0}.metric-label{font-size:12px;color:var(--muted)}.metric{font-size:27px;font-weight:800;margin:4px 0}.metric-note{font-size:11px;color:var(--green)}.section-title{font-size:14px;font-weight:800;margin:0 0 13px}.table-wrap{overflow:auto}.table-card{padding:0;overflow:hidden}.table-card .section-title{padding:17px 17px 0}table{border-collapse:collapse;width:100%;font-size:12px;min-width:600px}th{text-align:left;text-transform:uppercase;letter-spacing:.06em;font-size:10px;color:#64748b;background:#f8fafc}th,td{padding:12px 14px;border-bottom:1px solid #f1f5f9}tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:3px 8px;border-radius:30px;font-size:10px;font-weight:750;background:#f1f5f9;color:#475569}.pill.pending{background:#fef3c7;color:#92400e}.pill.approved,.pill.done{background:#dcfce7;color:#166534}.pill.open{background:#dbeafe;color:#1d4ed8}.pill.high{background:#fee2e2;color:#991b1b}.actions{display:flex;gap:6px;flex-wrap:wrap}.field{display:grid;gap:5px;margin-bottom:12px}.field label{font-size:12px;font-weight:700;color:#475569}.field input,.field select,.field textarea,.chat-input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:white;color:var(--ink)}.field textarea{min-height:80px;resize:vertical}.empty{padding:24px;text-align:center;color:#94a3b8}.item{padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff}.item h3{font-size:13px;margin:5px 0}.item p{font-size:12px;color:var(--muted);margin:5px 0}.item + .item{margin-top:10px}.onboard-step{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;margin-top:9px}.modal-backdrop{position:fixed;inset:0;z-index:30;background:#0f172a99;display:grid;place-items:center;padding:16px}.modal{width:min(520px,100%);max-height:90vh;overflow:auto;background:white;border-radius:18px;box-shadow:0 25px 70px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid var(--line)}.modal-body{padding:20px}.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:0 20px 20px}.chatbox{height:300px;overflow:auto;background:#f8fafc;padding:14px;display:flex;flex-direction:column;gap:10px}.bubble{max-width:85%;padding:10px 12px;border-radius:13px;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}.bubble.bot{align-self:flex-start;background:white;border:1px solid var(--line)}.bubble.user{align-self:flex-end;background:#4f46e5;color:white}.chat-row{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chat-row input{flex:1;min-width:0}.login-screen{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at top left,#e0e7ff,transparent 45%),var(--bg)}.login-card{width:min(430px,100%);background:white;border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 20px 60px #0f172a12}.login-card h1{margin:14px 0 6px;font-size:25px}.login-card p{color:var(--muted);font-size:12px}.login-card .logo{width:48px;height:48px}.toast{position:fixed;bottom:18px;right:18px;z-index:50;background:#0f172a;color:white;padding:12px 16px;border-radius:12px;box-shadow:0 8px 30px #0002;max-width:min(360px,calc(100vw - 36px));font-size:12px}.footer-note{font-size:11px;color:#94a3b8;margin:18px 2px}.progress{height:8px;background:#e2e8f0;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#4f46e5,#8b5cf6);border-radius:20px}
+@media(max-width:850px){.layout{grid-template-columns:1fr;padding:13px}.sidebar{position:static}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}.stats-mini{display:none}.grid.three{grid-template-columns:1fr}.grid.two{grid-template-columns:1fr}.topbar{padding:10px 12px;align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.top-actions select{max-width:155px}.brand{font-size:16px}.pagehead{flex-direction:column}.hero h2{font-size:21px}}@media(max-width:480px){.topbar{flex-wrap:wrap}.top-actions{width:100%;justify-content:space-between}.top-actions select{flex:1;max-width:none}.nav{grid-template-columns:1fr 1fr}.card{padding:14px}.hero{padding:19px}}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <form class="login-card" id="loginForm">
+    <div class="logo">🧭</div>
+    <h1>Saarthi <span style="color:#6366f1">People OS</span></h1>
+    <p>A practical people-operations workspace for early-stage teams.</p>
+    <div class="field"><label for="loginName">Your display name</label><input id="loginName" placeholder="e.g. Vivek" value="Demo User" required></div>
+    <div class="field"><label for="loginRole">Enter demo workspace as</label><select id="loginRole"><option value="founder">Founder / CEO</option><option value="hr">People Ops / HR</option><option value="manager">Engineering Manager</option><option value="employee">Employee</option><option value="candidate">Candidate</option></select></div>
+    <div class="field"><label for="demoCode">Demo access code</label><input id="demoCode" type="password" placeholder="Enter demo123" required></div>
+    <button class="primary" type="submit" style="width:100%;margin-top:4px">Open demo workspace →</button>
+    <p style="margin-top:14px">Demo access code: <strong>demo123</strong></p>
+    <p class="tiny">If this screen does not respond, open the downloaded file directly in Safari or Chrome (not the Files quick preview). Demo only: this is not secure authentication. Do not enter real employee or confidential information.</p>
+  </form>
+</div>
+<div id="app" class="hidden">
+<header class="topbar">
+  <div class="brand"><div class="logo">🧭</div><div>Saarthi <small>PEOPLE OS</small></div></div>
+  <div class="top-actions">
+    <span id="userGreeting" class="tiny" style="color:#cbd5e1"></span>
+    <select id="roleSelector" aria-label="Active demo role"><option value="founder">Founder / CEO</option><option value="hr">People Ops / HR</option><option value="manager">Engineering Manager</option><option value="employee">Employee</option><option value="candidate">Candidate</option></select>
+    <button id="aiOpen" class="primary">✨ Ask Saarthi</button>
+    <button id="logoutBtn" class="neutral small">Exit demo</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="eyebrow" id="roleBadge">FOUNDER ACCESS</div>
+    <nav class="nav" id="sideNav"></nav>
+    <div class="stats-mini"><div class="eyebrow" style="padding:0">Workspace summary</div><div class="statline"><span>Active headcount</span><strong id="statHeadcount">15</strong></div><div class="statline"><span>Pending approvals</span><strong id="statApprovals" style="color:#d97706">0</strong></div></div>
+  </aside>
+  <main class="content" id="mainContent"></main>
+</div>
+</div>
+<div id="modalRoot"></div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+const STORE_KEY='saarthi_people_os_demo_v2';
+const seedData={
+ activeRole:'founder',displayName:'Demo User',
+ leaves:[
+  {id:1,employee:'Ananya Sharma',type:'Casual Leave',days:2,date:'2026-10-28',reason:'Personal work',status:'Pending'},
+  {id:2,employee:'Rohan Mehta',type:'Sick Leave',days:1,date:'2026-10-20',reason:'Fever',status:'Approved'}
+ ],
+ reimbursements:[
+  {id:101,employee:'Priya Verma',category:'Software / SaaS',amount:2499,desc:'Figma Subscription',status:'Pending'},
+  {id:102,employee:'Vikram Patel',category:'Client Lunch',amount:1850,desc:'Meeting with prospective client',status:'Approved'}
+ ],
+ shoutouts:[
+  {id:1,from:'Arjun Das',to:'Rohan Mehta',badge:'🚀 Champion',text:'Kudos for resolving the production database latency bug within 30 minutes!'},
+  {id:2,from:'People Ops',to:'Priya Verma',badge:'💡 Innovator',text:'Great onboarding presentation for the new engineering cohort!'}
+ ],
+ tickets:[{id:301,user:'Siddharth Nair',subject:'Tax Declaration Verification',priority:'High',status:'Open'}],
+ onboarding:[
+  {id:1,title:'Workspace & tools provisioning',detail:'Google Workspace, Slack, GitHub and Figma access',status:'Done'},
+  {id:2,title:'Founder culture & product overview',detail:'Intro session and product roadmap review',status:'Done'},
+  {id:3,title:'First feature commit & code review',detail:'Ship a first improvement with mentor supervision',status:'In Progress'}
+ ]
+};
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function loadState(){
+ try{const raw=localStorage.getItem(STORE_KEY);if(!raw)return clone(seedData);const parsed=JSON.parse(raw);return {...clone(seedData),...parsed,leaves:Array.isArray(parsed.leaves)?parsed.leaves:clone(seedData.leaves),reimbursements:Array.isArray(parsed.reimbursements)?parsed.reimbursements:clone(seedData.reimbursements),shoutouts:Array.isArray(parsed.shoutouts)?parsed.shoutouts:clone(seedData.shoutouts),tickets:Array.isArray(parsed.tickets)?parsed.tickets:clone(seedData.tickets),onboarding:Array.isArray(parsed.onboarding)?parsed.onboarding:clone(seedData.onboarding)}}
+ catch(e){console.warn('Could not read saved demo data; using sample data.',e);return clone(seedData)}
+}
+let state=loadState(),currentTab='dashboard',toastTimer;
+const $=id=>document.getElementById(id);
+const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const money=value=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(Number(value)||0);
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));return true}catch(e){console.error(e);notify('Could not save in this browser. Check storage settings.');return false}}
+function notify(message){const el=$('toast');el.textContent=message;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),2800)}
+const roles={
+ founder:{badge:'FOUNDER / CEO',nav:[['dashboard','Executive Dashboard','▦'],['playbook','Founders’ Playbook','📘'],['rewards','Rewards & Culture','🏆'],['leaves','Leave Approvals','📅'],['reimbursements','Expense Claims','₹'],['helpdesk','Support Helpdesk','🎧']]},
+ hr:{badge:'PEOPLE OPS / HR',nav:[['dashboard','People Ops Hub','♙'],['playbook','Founders’ Playbook','📘'],['onboarding','Onboarding Engine','🚀'],['leaves','Leave Management','📅'],['reimbursements','Reimbursements','₹'],['helpdesk','Helpdesk Tickets','🎧'],['rewards','Rewards & Culture','🏆']]},
+ manager:{badge:'TEAM MANAGER',nav:[['dashboard','Team Dashboard','▦'],['leaves','Team Leave Requests','📅'],['reimbursements','Expense Approvals','₹'],['rewards','Give Shoutout','🏆'],['helpdesk','Helpdesk Tickets','🎧']]},
+ employee:{badge:'EMPLOYEE SELF-SERVICE',nav:[['dashboard','My Workspace','⌂'],['leaves','My Leaves','📅'],['reimbursements','My Expense Claims','₹'],['rewards','Recognition Wall','🏆'],['helpdesk','HR Helpdesk','?'],['onboarding','My Onboarding','🚀']]},
+ candidate:{badge:'CANDIDATE PORTAL',nav:[['candidate_portal','Application Status','✎'],['helpdesk','Candidate Support','🎧']]}
+};
+function pendingCount(){return state.leaves.filter(x=>x.status==='Pending').length+state.reimbursements.filter(x=>x.status==='Pending').length}
+function setRole(role){if(!roles[role])return;state.activeRole=role;currentTab=roles[role].nav[0][0];$('roleSelector').value=role;saveState();renderApp()}
+function renderApp(){
+ const role=state.activeRole,config=roles[role]||roles.founder;
+ $('roleBadge').textContent=config.badge;$('userGreeting').textContent='Hi, '+state.displayName;
+ $('statHeadcount').textContent='15';$('statApprovals').textContent=pendingCount();
+ $('sideNav').innerHTML=config.nav.map(([id,label,icon])=>`<button type="button" data-tab="${id}" class="${currentTab===id?'active':''}"><span aria-hidden="true">${icon}</span><span>${label}</span></button>`).join('');
+ $('sideNav').querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{currentTab=btn.dataset.tab;renderApp()}));
+ const allowed=config.nav.some(x=>x[0]===currentTab);if(!allowed)currentTab=config.nav[0][0];
+ const main=$('mainContent');
+ const routes={dashboard:renderDashboard,playbook:renderPlaybook,onboarding:renderOnboarding,leaves:renderLeaves,reimbursements:renderReimbursements,rewards:renderRewards,helpdesk:renderHelpdesk,candidate_portal:renderCandidatePortal};
+ (routes[currentTab]||renderDashboard)(main);
+}
+function pageHead(title,subtitle,action=''){return `<div class="pagehead"><div><h1>${title}</h1><p>${subtitle}</p></div>${action}</div>`}
+function metric(label,value,note,icon){return `<div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="metric-label">${label}</div><div class="metric">${value}</div><div class="metric-note">${note}</div></div><div style="font-size:24px;background:#eef2ff;border-radius:12px;padding:10px;height:max-content">${icon}</div></div></div>`}
+function renderDashboard(el){
+ if(state.activeRole==='candidate'){renderCandidatePortal(el);return}
+ const role=state.activeRole,heading={founder:'Founder & CEO',hr:'People Leader',manager:'Engineering Lead',employee:state.displayName}[role]||state.displayName;
+ const pendingLeaves=state.leaves.filter(x=>x.status==='Pending'),pendingClaims=state.reimbursements.filter(x=>x.status==='Pending');
+ let rows=[...pendingLeaves.map(l=>({type:'Leave',who:l.employee,detail:`${l.type} (${l.days} day${l.days===1?'':'s'})`,id:l.id,kind:'leave'})),...pendingClaims.map(r=>({type:'Expense',who:r.employee,detail:`${r.desc} (${money(r.amount)})`,id:r.id,kind:'claim'}))];
+ el.innerHTML=`<section class="hero"><div class="eyebrow">WELCOME TO YOUR WORKSPACE</div><h2>Hello, ${escapeHTML(heading)} 👋</h2><p>Saarthi keeps everyday people workflows organised. This workspace uses sample data for demonstration.</p></section>
+ <div class="grid three">${metric('Active headcount','15','Demo workforce','👥')}${metric('Pending approvals',pendingCount(),'Items needing review','⏳')}${metric('Peer recognitions',state.shoutouts.length,'Kudos shared','🏆')}</div>
+ <div class="card table-card" style="margin-top:16px"><h3 class="section-title">Pending leave & expense approvals</h3><div class="table-wrap"><table><thead><tr><th>Type</th><th>Requested by</th><th>Details</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td><strong>${r.type}</strong></td><td>${escapeHTML(r.who)}</td><td>${escapeHTML(r.detail)}</td><td><span class="pill pending">Pending</span></td><td><button class="success small" data-approve="${r.kind}" data-id="${r.id}">Approve</button></td></tr>`).join(''):`<tr><td colspan="5" class="empty">No pending approvals. Excellent work!</td></tr>`}</tbody></table></div></div>
+ <div class="grid two" style="margin-top:16px"><div class="card"><h3 class="section-title">People Ops snapshot</h3><p class="muted">Use the left navigation to manage leave, reimbursements, recognition and helpdesk requests.</p><button class="secondary" data-goto="leaves">Review leave requests →</button></div><div class="card"><h3 class="section-title">Saarthi tip</h3><p class="muted">For fair decisions, use documented criteria and human review. Treat demo metrics as illustrative, not evidence about real employees.</p><button class="secondary" id="dashboardAsk">Ask Saarthi AI →</button></div></div>`;
+ el.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>b.dataset.approve==='leave'?approveLeave(Number(b.dataset.id)):approveClaim(Number(b.dataset.id))));
+ el.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.goto;renderApp()}));
+ const ask=$('dashboardAsk');if(ask)ask.addEventListener('click',openAi);
+}
+function renderPlaybook(el){
+ const cards=[
+ ['🌱','First 10 hires','Prioritise clearly defined outcomes, structured interviews, relevant skills and evidence of learning. Avoid relying on “culture fit” alone.'],
+ ['🪙','Equity & ESOP basics','Explain vesting, cliff, exercise rules, dilution and tax implications transparently. Have qualified counsel review the plan.'],
+ ['💬','Remote & hybrid work','Set clear response-time expectations, document decisions, and make meetings accessible across working arrangements.'],
+ ['🎯','Quarterly goals','Set a small number of measurable outcomes, name an owner, and review progress regularly with context.'],
+ ['🧭','Performance conversations','Use specific examples, clear expectations, support plans and regular check-ins. Do not base decisions on one metric alone.'],
+ ['🛡️','People policies','Keep policies discoverable, review them regularly, and verify local legal requirements before implementation.']];
+ el.innerHTML=pageHead('Founders’ People Playbook','Practical starting points for hiring, culture, performance and people operations')+`<div class="grid two">${cards.map(c=>`<article class="card"><div style="font-size:23px">${c[0]}</div><h3 style="margin:8px 0;font-size:14px">${c[1]}</h3><p class="muted" style="font-size:12px;margin:0">${c[2]}</p></article>`).join('')}</div>`;
+}
+function renderOnboarding(el){
+ const done=state.onboarding.filter(x=>x.status==='Done').length,pct=Math.round(done/state.onboarding.length*100)||0;
+ el.innerHTML=pageHead('Onboarding engine','Sample 30-60-90 day journey. Update a step as work is completed.')+`<div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><div><h3 class="section-title" style="margin-bottom:4px">October 2026 cohort</h3><p class="muted tiny">3 sample team members · demo checklist</p></div><strong style="color:#4f46e5">${pct}% completed</strong></div><div class="progress" style="margin:13px 0 18px"><span style="width:${pct}%"></span></div>${state.onboarding.map(s=>`<div class="onboard-step"><div><strong style="font-size:12px">${escapeHTML(s.title)}</strong><div class="muted tiny">${escapeHTML(s.detail)}</div></div><div class="actions"><span class="pill ${s.status==='Done'?'done':'pending'}">${escapeHTML(s.status)}</span><button class="secondary small" data-step="${s.id}">${s.status==='Done'?'Reopen':'Mark done'}</button></div></div>`).join('')}</div>`;
+ el.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{const s=state.onboarding.find(x=>x.id===Number(b.dataset.step));if(s){s.status=s.status==='Done'?'In Progress':'Done';saveState();renderApp();notify('Onboarding step updated')}}));
+}
+function renderLeaves(el){
+ const role=state.activeRole;
+ el.innerHTML=pageHead(role==='employee'?'My leave requests':'Leave management','Apply for leave and review sample requests.',`<button class="primary" id="applyLeave">+ Apply leave</button>`)+`<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Employee</th><th>Type</th><th>Days</th><th>Date</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead><tbody>${state.leaves.map(l=>`<tr><td><strong>${escapeHTML(l.employee)}</strong></td><td>${escapeHTML(l.type)}</td><td>${l.days}</td><td>${escapeHTML(l.date)}</td><td>${escapeHTML(l.reason)}</td><td><span class="pill ${l.status.toLowerCase()}">${l.status}</span></td><td>${l.status==='Pending'&&['founder','hr','manager'].includes(role)?`<button class="success small" data-approve-leave="${l.id}">Approve</button>`:'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
+ $('applyLeave').addEventListener('click',()=>openForm('Apply for leave',[{name:'type',label:'Leave type',type:'select',options:['Casual Leave','Sick Leave','Earned Leave','Unpaid Leave'],required:true},{name:'days',label:'Number of days',type:'number',min:1,required:true,value:'1'},{name:'date',label:'Start date',type:'date',required:true,value:'2026-11-01'},{name:'reason',label:'Reason',type:'textarea',required:true}],v=>{state.leaves.unshift({id:Date.now(),employee:state.displayName,type:v.type,days:Math.max(1,Number(v.days)||1),date:v.date,reason:v.reason,status:'Pending'});saveState();renderApp();notify('Leave request submitted')}));
+ el.querySelectorAll('[data-approve-leave]').forEach(b=>b.addEventListener('click',()=>approveLeave(Number(b.dataset.approveLeave))));
+}
+function approveLeave(id){const l=state.leaves.find(x=>x.id===id);if(l){l.status='Approved';saveState();renderApp();notify('Leave request approved')}}
+function renderReimbursements(el){
+ const role=state.activeRole;
+ el.innerHTML=pageHead('Reimbursement claims','Submit sample expenses and track approval status.',`<button class="primary" id="newClaim">+ New claim</button>`)+`<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Employee</th><th>Category</th><th>Description</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody>${state.reimbursements.map(r=>`<tr><td><strong>${escapeHTML(r.employee)}</strong></td><td>${escapeHTML(r.category)}</td><td>${escapeHTML(r.desc)}</td><td><strong>${money(r.amount)}</strong></td><td><span class="pill ${r.status.toLowerCase()}">${r.status}</span></td><td>${r.status==='Pending'&&['founder','hr','manager'].includes(role)?`<button class="success small" data-approve-claim="${r.id}">Approve</button>`:'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
+ $('newClaim').addEventListener('click',()=>openForm('Submit expense claim',[{name:'category',label:'Category',type:'select',options:['Software / SaaS','Travel','Client meeting','Equipment','General expense'],required:true},{name:'desc',label:'Description',type:'text',required:true},{name:'amount',label:'Amount (INR)',type:'number',min:1,required:true}],v=>{state.reimbursements.unshift({id:Date.now(),employee:state.displayName,category:v.category,desc:v.desc,amount:Number(v.amount),status:'Pending'});saveState();renderApp();notify('Expense claim submitted')}));
+ el.querySelectorAll('[data-approve-claim]').forEach(b=>b.addEventListener('click',()=>approveClaim(Number(b.dataset.approveClaim))));
+}
+function approveClaim(id){const c=state.reimbursements.find(x=>x.id===id);if(c){c.status='Approved';saveState();renderApp();notify('Expense claim approved')}}
+function renderRewards(el){
+ el.innerHTML=pageHead('Culture & peer recognition','Celebrate helpful actions with specific, meaningful appreciation.',`<button class="primary" id="giveShoutout">+ Give shoutout</button>`)+`<div class="grid two">${state.shoutouts.map(s=>`<article class="card"><div style="display:flex;justify-content:space-between;gap:8px"><span class="pill" style="background:#f3e8ff;color:#6b21a8">${escapeHTML(s.badge)}</span><span class="muted tiny">Recognition</span></div><p style="font-size:13px;margin:14px 0">${escapeHTML(s.text)}</p><div class="muted tiny" style="border-top:1px solid #f1f5f9;padding-top:10px"><strong style="color:#1e293b">${escapeHTML(s.from)}</strong> → <strong style="color:#1e293b">${escapeHTML(s.to)}</strong></div></article>`).join('')}</div>`;
+ $('giveShoutout').addEventListener('click',()=>openForm('Give a shoutout',[{name:'to',label:'Recipient name',type:'text',required:true},{name:'badge',label:'Recognition badge',type:'select',options:['🚀 Champion','💡 Innovator','🤝 Team player','⭐ Star performer'],required:true},{name:'text',label:'What did they do?',type:'textarea',required:true}],v=>{state.shoutouts.unshift({id:Date.now(),from:state.displayName,to:v.to,badge:v.badge,text:v.text});saveState();renderApp();notify('Shoutout posted')}));
+}
+function renderHelpdesk(el){
+ el.innerHTML=pageHead('HR & operations helpdesk','Raise and track operational questions in this sample workspace.',`<button class="primary" id="newTicket">+ Raise ticket</button>`)+`<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Ticket ID</th><th>Raised by</th><th>Subject</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead><tbody>${state.tickets.map(t=>`<tr><td><strong>#TK-${t.id}</strong></td><td>${escapeHTML(t.user)}</td><td>${escapeHTML(t.subject)}</td><td><span class="pill ${t.priority.toLowerCase()}">${escapeHTML(t.priority)}</span></td><td><span class="pill ${t.status==='Resolved'?'approved':'open'}">${escapeHTML(t.status)}</span></td><td>${t.status!=='Resolved'&&['founder','hr'].includes(state.activeRole)?`<button class="secondary small" data-resolve="${t.id}">Resolve</button>`:'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
+ $('newTicket').addEventListener('click',()=>openForm('Raise a helpdesk ticket',[{name:'subject',label:'What do you need help with?',type:'text',required:true},{name:'priority',label:'Priority',type:'select',options:['Normal','High','Low'],required:true}],v=>{state.tickets.unshift({id:Math.floor(1000+Math.random()*9000),user:state.displayName,subject:v.subject,priority:v.priority,status:'Open'});saveState();renderApp();notify('Helpdesk ticket created')}));
+ el.querySelectorAll('[data-resolve]').forEach(b=>b.addEventListener('click',()=>{const t=state.tickets.find(x=>x.id===Number(b.dataset.resolve));if(t){t.status='Resolved';saveState();renderApp();notify('Ticket marked resolved')}}));
+}
+function renderCandidatePortal(el){
+ el.innerHTML=pageHead('Application status','Sample candidate portal. Stages shown here are illustrative.')+`<div class="hero"><div class="eyebrow">APPLICATION TRACKING</div><h2>Full Stack Developer</h2><p>Track your recruitment journey in one place. This demo does not connect to a live hiring system.</p></div><div class="grid two">${[['Stage 1','Resume screening','Cleared · Oct 15','done'],['Stage 2','Technical round','Cleared · Oct 20','done'],['Stage 3','Founder conversation','Scheduled · Sample date','pending'],['Stage 4','Offer decision','Pending previous stage','']].map(s=>`<div class="card"><span class="pill ${s[3]}">${s[0]}</span><h3 style="font-size:14px;margin:9px 0 4px">${s[1]}</h3><p class="muted tiny">${s[2]}</p></div>`).join('')}</div>`;
+}
+function openForm(title,fields,onSave){
+ const root=$('modalRoot');root.innerHTML=`<div class="modal-backdrop" id="modalBackdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><strong id="modalTitle">${escapeHTML(title)}</strong><button class="neutral small" id="modalClose" aria-label="Close">✕</button></div><form id="dynamicForm"><div class="modal-body">${fields.map(f=>`<div class="field"><label for="field_${f.name}">${escapeHTML(f.label)}</label>${f.type==='select'?`<select id="field_${f.name}" name="${f.name}" ${f.required?'required':''}>${f.options.map(o=>`<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`).join('')}</select>`:f.type==='textarea'?`<textarea id="field_${f.name}" name="${f.name}" ${f.required?'required':''} placeholder="${escapeHTML(f.label)}"></textarea>`:`<input id="field_${f.name}" name="${f.name}" type="${f.type||'text'}" ${f.min!==undefined?`min="${f.min}"`:''} value="${escapeHTML(f.value||'')}" ${f.required?'required':''} ${f.type==='number'?'step="any"':''} placeholder="${escapeHTML(f.label)}">`}</div>`).join('')}</div><div class="modal-foot"><button type="button" class="neutral" id="modalCancel">Cancel</button><button type="submit" class="primary">Save</button></div></form></section></div>`;
+ const close=()=>root.innerHTML='';$('modalClose').addEventListener('click',close);$('modalCancel').addEventListener('click',close);
+ $('modalBackdrop').addEventListener('click',e=>{if(e.target.id==='modalBackdrop')close()});
+ $('dynamicForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget),values={};for(const f of fields)values[f.name]=String(fd.get(f.name)||'').trim();if(fields.some(f=>f.required&&!values[f.name])){notify('Please complete the required fields');return}close();onSave(values)});
+ const first=root.querySelector('input,select,textarea');if(first)first.focus();
+}
+function openAi(){ $('aiModal')?.remove();const wrap=document.createElement('div');wrap.id='aiModal';wrap.className='modal-backdrop';wrap.innerHTML=`<section class="modal" role="dialog" aria-modal="true" aria-labelledby="aiTitle"><div class="modal-head"><div><strong id="aiTitle">✨ Saarthi assistant</strong><div class="muted tiny">Demo responses · not connected to a live AI service</div></div><button class="neutral small" id="aiClose">✕</button></div><div id="chatBox" class="chatbox"><div class="bubble bot">Hi! I can guide you around this demo. Try asking about leave, expenses, onboarding, ESOPs or policies.</div></div><form id="chatForm" class="chat-row"><input class="chat-input" id="chatInput" placeholder="Ask about a people process…" autocomplete="off" aria-label="Ask Saarthi"><button class="primary" type="submit">Send</button></form></section>`;$('modalRoot').appendChild(wrap);
+ const close=()=>wrap.remove();$('aiClose').addEventListener('click',close);wrap.addEventListener('click',e=>{if(e.target===wrap)close()});
+ $('chatForm').addEventListener('submit',e=>{e.preventDefault();const input=$('chatInput'),q=input.value.trim();if(!q)return;addBubble('user',q);input.value='';const lower=q.toLowerCase();let answer='For this demo, use the left navigation to open the relevant workflow. Confirm company-specific rules with your People team before acting.';
+ if(lower.includes('leave'))answer='Open Leave Management from the sidebar and choose “Apply leave”. You can submit a sample request and see it appear with Pending status.';
+ else if(lower.includes('expense')||lower.includes('reimburse')||lower.includes('claim'))answer='Open Reimbursements and select “New claim”. Add the category, description and amount. The demo stores the claim in this browser.';
+ else if(lower.includes('onboard'))answer='Open Onboarding Engine to review the sample checklist. Use “Mark done” to update a step and see the progress bar change.';
+ else if(lower.includes('esop')||lower.includes('equity'))answer='ESOPs require clear documentation of eligibility, vesting, exercise, dilution and tax treatment. Get the actual plan reviewed by qualified legal and tax professionals.';
+ else if(lower.includes('policy')||lower.includes('compliance'))answer='Use the playbook as a starting point only. Validate applicable Indian employment, privacy and workplace requirements with a qualified professional before adopting a policy.';
+ else if(lower.includes('helpdesk')||lower.includes('ticket'))answer='Open Helpdesk Tickets, select “Raise ticket”, and submit a sample issue. Founder/HR demo roles can mark tickets as resolved.';
+ setTimeout(()=>addBubble('bot',answer),120)});
+ function addBubble(kind,text){const b=document.createElement('div');b.className='bubble '+kind;b.textContent=text;$('chatBox').appendChild(b);$('chatBox').scrollTop=$('chatBox').scrollHeight}
+ $('chatInput').focus();
+}
+window.saarthiLogin = function(e){
+ if(e){e.preventDefault();}
+ const code=$('demoCode').value.trim();
+ if(code!=='demo123'){notify('Demo code did not match. Enter demo123.');$('demoCode').focus();return false;}
+ state.displayName=$('loginName').value.trim()||'Demo User';
+ state.activeRole=$('loginRole').value;
+ saveState();
+ $('loginScreen').classList.add('hidden');
+ $('app').classList.remove('hidden');
+ currentTab=roles[state.activeRole].nav[0][0];
+ $('roleSelector').value=state.activeRole;
+ renderApp();
+ notify('Welcome to the Saarthi demo');
+ return false;
+};
+$('loginForm').addEventListener('submit',window.saarthiLogin);
+$('roleSelector').addEventListener('change',e=>setRole(e.target.value));
+$('aiOpen').addEventListener('click',openAi);
+$('logoutBtn').addEventListener('click',()=>{$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('demoCode').value='';});
+if(state.activeRole&&roles[state.activeRole]){$('loginRole').value=state.activeRole;$('loginName').value=state.displayName||'Demo User'}
+})();
+</script>
+</body>
+</html>
