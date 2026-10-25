@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saarthi People OS - Early-Stage Startup HR & Operations</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+body { font-family: 'Inter', sans-serif; }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<!-- TOP NAVIGATION BAR -->
+<header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+<i class="fa-solid fa-compass text-xl"></i>
+</div>
+<div>
+<span class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Saarthi</span>
+<span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-indigo-300 font-semibold border border-slate-700 ml-1">People OS</span>
+</div>
+</div>
+<!-- DYNAMIC ROLE SWITCHER -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
+<label for="roleSelector" class="text-xs font-medium text-slate-400 pl-2 hidden md:block">Active Role:</label>
+<select id="roleSelector" onchange="changeRole(this.value)" class="bg-slate-900 text-slate-100 text-xs font-semibold rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer">
+<option value="founder">Founder / CEO</option>
+<option value="hr">People Ops / HR</option>
+<option value="manager">Engineering Manager</option>
+<option value="employee">Senior Software Engineer</option>
+<option value="candidate">Candidate (Applicant)</option>
+</select>
+</div>
+<button onclick="openAiAssistant()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-medium px-3.5 py-2 rounded-xl flex items-center space-x-2 transition shadow-md shadow-indigo-600/20">
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+<span class="hidden sm:inline">Ask Saarthi AI</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER -->
+<div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
+<!-- SIDE NAVIGATION MENU -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sticky top-22">
+<div class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400" id="roleBadge">FOUNDER ACCESS</div>
+<nav class="mt-2 space-y-1" id="sideNav">
+<!-- Dynamically Populated Side Links based on Role -->
+</nav>
+<div id="quickStats" class="mt-6 pt-4 border-t border-slate-100 space-y-3">
+<div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Workspace Summary</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-600">Active Headcount</span>
+<span class="font-bold text-slate-900" id="statHeadcount">28</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-600">Pending Approvals</span>
+<span class="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full" id="statApprovals">3</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- CONTENT AREA -->
+<main class="flex-1 min-w-0" id="mainContent">
+<!-- Dynamic Workspace Views Rendered Here -->
+</main>
+</div>
+<!-- AI ASSISTANT MODAL -->
+<div id="aiModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+<div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col h-[520px]">
+<div class="bg-slate-900 text-white p-4 flex justify-between items-center border-b border-slate-800">
+<div class="flex items-center space-x-2">
+<div class="bg-indigo-600 p-1.5 rounded-lg">
+<i class="fa-solid fa-robot text-sm"></i>
+</div>
+<div>
+<h3 class="font-semibold text-sm">Saarthi AI Assistant</h3>
+<p class="text-[10px] text-slate-400">Context-Aware HR & Operations Guide</p>
+</div>
+</div>
+<button onclick="closeAiAssistant()" class="text-slate-400 hover:text-white transition text-lg"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div id="aiChatBox" class="flex-1 p-4 overflow-y-auto space-y-3 custom-scrollbar bg-slate-50">
+<div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl text-xs text-indigo-900">
+Hello! I'm <strong>Saarthi AI</strong>. Ask me about your onboarding tasks, leave balances, reimbursement rules, or company playbook policies.
+</div>
+</div>
+<div class="p-3 bg-white border-t border-slate-200 flex space-x-2">
+<input type="text" id="aiInput" placeholder="Ask Saarthi (e.g., How do I apply for leave?)..." class="flex-1 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-indigo-500" onkeydown="if(event.key==='Enter') sendAiQuery()">
+<button onclick="sendAiQuery()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-indigo-700 transition">Send</button>
+</div>
+</div>
+</div>
+<script>
+// GLOBAL APP STATE & PERSISTENCE
+const DEFAULT_DATA = {
+activeRole: 'founder',
+leaves: [
+{ id: 1, employee: 'Ananya Sharma', type: 'Casual Leave', days: 2, status: 'Pending', date: '2026-10-28', reason: 'Personal work' },
+{ id: 2, employee: 'Rohan Mehta', type: 'Sick Leave', days: 1, status: 'Approved', date: '2026-10-20', reason: 'Fever' }
+],
+reimbursements: [
+{ id: 101, employee: 'Priya Verma', category: 'Software / SaaS', amount: '₹2,499', status: 'Pending', desc: 'Figma Subscription' },
+{ id: 102, employee: 'Vikram Patel', category: 'Client Lunch', amount: '₹1,850', status: 'Approved', desc: 'Meeting with prospective client' }
+],
+shoutouts: [
+{ from: 'Arjun Das', to: 'Rohan Mehta', badge: '🚀 Champion', text: 'Kudos for resolving the production database latency bug within 30 minutes!' },
+{ from: 'People Ops', to: 'Priya Verma', badge: '💡 Innovator', text: 'Great onboarding presentation for the new engineering cohort!' }
+],
+tickets: [
+{ id: 301, user: 'Siddharth Nair', subject: 'Tax Declaration Verification', priority: 'High', status: 'Open' }
+]
+};
+function loadState() {
+const stored = localStorage.getItem('saarthi_os_state');
+return stored ? JSON.parse(stored) : DEFAULT_DATA;
+}
+function saveState() {
+localStorage.setItem('saarthi_os_state', JSON.stringify(appState));
+}
+let appState = loadState();
+let currentTab = 'dashboard';
+// ROLE NAVIGATION STRUCTURE
+const ROLE_CONFIG = {
+founder: {
+badge: 'FOUNDER / CEO',
+nav: [
+{ id: 'dashboard', label: 'Executive Dashboard', icon: 'fa-chart-pie' },
+{ id: 'playbook', label: 'Founders' Playbook', icon: 'fa-book-bookmark' },
+{ id: 'rewards', label: 'Rewards & Culture', icon: 'fa-trophy' },
+{ id: 'leaves', label: 'Leave Approvals', icon: 'fa-calendar-check' },
+{ id: 'reimbursements', label: 'Expense Claims', icon: 'fa-receipt' },
+{ id: 'helpdesk', label: 'Support Helpdesk', icon: 'fa-headset' }
+]
+},
+hr: {
+badge: 'PEOPLE OPS / HR',
+nav: [
+{ id: 'dashboard', label: 'People Ops Hub', icon: 'fa-users-gear' },
+{ id: 'playbook', label: 'Founders' Playbook', icon: 'fa-book-bookmark' },
+{ id: 'onboarding', label: 'Onboarding Engine', icon: 'fa-user-plus' },
+{ id: 'leaves', label: 'Leave Management', icon: 'fa-calendar-check' },
+{ id: 'reimbursements', label: 'Reimbursements', icon: 'fa-receipt' },
+{ id: 'helpdesk', label: 'Helpdesk Tickets', icon: 'fa-headset' }
+]
+},
+manager: {
+badge: 'TEAM MANAGER',
+nav: [
+{ id: 'dashboard', label: 'Team Dashboard', icon: 'fa-users' },
+{ id: 'leaves', label: 'Team Leave Requests', icon: 'fa-calendar-check' },
+{ id: 'reimbursements', label: 'Expense Approvals', icon: 'fa-receipt' },
+{ id: 'rewards', label: 'Give Shoutout', icon: 'fa-trophy' }
+]
+},
+employee: {
+badge: 'EMPLOYEE SELF-SERVICE',
+nav: [
+{ id: 'dashboard', label: 'My Workspace', icon: 'fa-house-user' },
+{ id: 'leaves', label: 'My Leaves', icon: 'fa-calendar-days' },
+{ id: 'reimbursements', label: 'My Expense Claims', icon: 'fa-receipt' },
+{ id: 'rewards', label: 'Recognition Wall', icon: 'fa-trophy' },
+{ id: 'helpdesk', label: 'HR Helpdesk', icon: 'fa-circle-question' }
+]
+},
+candidate: {
+badge: 'CANDIDATE PORTAL',
+nav: [
+{ id: 'candidate_portal', label: 'Application Status', icon: 'fa-file-signature' },
+{ id: 'helpdesk', label: 'Candidate Support', icon: 'fa-headset' }
+]
+}
+};
+// INIT APP
+window.onload = function() {
+document.getElementById('roleSelector').value = appState.activeRole;
+renderApp();
+};
+function changeRole(role) {
+appState.activeRole = role;
+saveState();
+const allowedTabs = ROLE_CONFIG[role].nav.map(n => n.id);
+if (!allowedTabs.includes(currentTab)) {
+currentTab = allowedTabs[0];
+}
+renderApp();
+}
+function switchTab(tabId) {
+currentTab = tabId;
+renderApp();
+}
+function renderApp() {
+const config = ROLE_CONFIG[appState.activeRole];
+document.getElementById('roleBadge').innerText = config.badge;
+// Render Sidebar Nav
+const navContainer = document.getElementById('sideNav');
+navContainer.innerHTML = config.nav.map(item => ⁠<button onclick="switchTab('${item.id}')" class="w-full flex items-center space-x-3 px-3 py-2.5 text-xs font-semibold rounded-xl transition ${currentTab === item.id ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}"> <i class="fa-solid ${item.icon} w-4 text-center ${currentTab === item.id ? 'text-indigo-600' : 'text-slate-400'}"></i> <span>${item.label}</span> </button>⁠).join('');
+// Update Summary Stats
+const pendingLeaves = appState.leaves.filter(l => l.status === 'Pending').length;
+const pendingClaims = appState.reimbursements.filter(r => r.status === 'Pending').length;
+document.getElementById('statApprovals').innerText = pendingLeaves + pendingClaims;
+// Render View Content
+const mainContent = document.getElementById('mainContent');
+switch(currentTab) {
+case 'dashboard': renderDashboard(mainContent); break;
+case 'playbook': renderPlaybook(mainContent); break;
+case 'onboarding': renderOnboarding(mainContent); break;
+case 'leaves': renderLeaves(mainContent); break;
+case 'reimbursements': renderReimbursements(mainContent); break;
+case 'rewards': renderRewards(mainContent); break;
+case 'helpdesk': renderHelpdesk(mainContent); break;
+case 'candidate_portal': renderCandidatePortal(mainContent); break;
+default: renderDashboard(mainContent);
+}
+}
+// DASHBOARD VIEWS
+function renderDashboard(container) {
+const role = appState.activeRole;
+if (role === 'candidate') {
+renderCandidatePortal(container);
+return;
+}
+let content = `
+<div class="space-y-6">
+<div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 rounded-2xl text-white shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Welcome Back</span>
+<h1 class="text-2xl font-bold mt-1">Hello, ${role === 'founder' ? 'Founder & CEO' : role === 'hr' ? 'People Leader' : role === 'manager' ? 'Engineering Lead' : 'Senior Software Engineer'} 👋</h1>
+<p class="text-xs text-slate-300 mt-1 max-w-xl">Saarthi People OS is active. All workflows, policies, and team operations are running smoothly.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-xs font-medium text-slate-500">Team Headcount</p>
+<p class="text-2xl font-bold text-slate-900 mt-1">28</p>
+<p class="text-[10px] text-emerald-600 font-semibold mt-1">↑ +3 this month</p>
+</div>
+<div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-xs font-medium text-slate-500">Pending Approvals</p>
+<p class="text-2xl font-bold text-slate-900 mt-1">${appState.leaves.filter(l => l.status==='Pending').length + appState.reimbursements.filter(r => r.status==='Pending').length}</p>
+<p class="text-[10px] text-amber-600 font-semibold mt-1">Action needed</p>
+</div>
+<div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left text-lg"></i></div>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-xs font-medium text-slate-500">Culture & Peer Kudos</p>
+<p class="text-2xl font-bold text-slate-900 mt-1">${appState.shoutouts.length}</p>
+<p class="text-[10px] text-purple-600 font-semibold mt-1">High engagement</p>
+</div>
+<div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-trophy text-lg"></i></div>
+</div>
+</div>
+<!-- RECENT ACTIVITY TABLE -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+<h3 class="text-sm font-bold text-slate-900 mb-4">Pending Leave & Expense Approvals</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs text-slate-600">
+<thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-100">
+<tr>
+<th class="p-3">Type</th>
+<th class="p-3">Requested By</th>
+<th class="p-3">Details</th>
+<th class="p-3">Status</th>
+<th class="p-3">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+${appState.leaves.filter(l => l.status==='Pending').map(l => ⁠<tr> <td class="p-3 font-semibold text-indigo-600">Leave</td> <td class="p-3 font-medium text-slate-800">${l.employee}</td> <td class="p-3">${l.type} (${l.days} days)</td> <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-800 font-semibold">Pending</span></td> <td class="p-3 space-x-2"> <button onclick="approveLeave(${l.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg">Approve</button> </td> </tr>⁠).join('')}
+${appState.reimbursements.filter(r => r.status==='Pending').map(r => ⁠<tr> <td class="p-3 font-semibold text-purple-600">Expense</td> <td class="p-3 font-medium text-slate-800">${r.employee}</td> <td class="p-3">${r.desc} (${r.amount})</td> <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-800 font-semibold">Pending</span></td> <td class="p-3"> <button onclick="approveClaim(${r.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg">Approve</button> </td> </tr>⁠).join('')}
+${appState.leaves.filter(l => l.status==='Pending').length === 0 && appState.reimbursements.filter(r => r.status==='Pending').length === 0 ? ⁠<tr><td colspan="5" class="p-4 text-center text-slate-400">No pending approvals left. Excellent work!</td></tr>⁠ : ''}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+`;
+container.innerHTML = content;
+}
+// PLAYBOOK VIEW
+function renderPlaybook(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-md">
+<h2 class="text-xl font-bold">Founders' People Playbook 📖</h2>
+<p class="text-xs text-indigo-200 mt-1">Proven early-stage frameworks for hiring, culture, compensation, and performance.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+<div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-seedling"></i></div>
+<h3 class="text-sm font-bold text-slate-900">First 10 Employees Hiring Framework</h3>
+<p class="text-xs text-slate-600 mt-2">Hire generalists with high slope over experience. Prioritize cultural alignment, speed of execution, and extreme ownership.</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-coins"></i></div>
+<h3 class="text-sm font-bold text-slate-900">Startup ESOP & Equity Grant Policy</h3>
+<p class="text-xs text-slate-600 mt-2">Standard 4-year vesting schedule with a 1-year cliff. Allocate 10-12% ESOP pool for early key hires.</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+<div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-heart-pulse"></i></div>
+<h3 class="text-sm font-bold text-slate-900">Remote & Hybrid Work Culture</h3>
+<p class="text-xs text-slate-600 mt-2">Async-first communication, core working hours (11 AM - 4 PM), monthly team offsites, and clear outcome-based metrics.</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-bullseye"></i></div>
+<h3 class="text-sm font-bold text-slate-900">Quarterly OKRs Template</h3>
+<p class="text-xs text-slate-600 mt-2">Keep maximum 3 Objectives per team with 3 measurable Key Results each. Review weekly during 1-on-1s.</p>
+</div>
+</div>
+</div>
+`;
+}
+// ONBOARDING ENGINE
+function renderOnboarding(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Gamified Onboarding Track</h2>
+<p class="text-xs text-slate-500">Automated 30-60-90 day onboarding progress for new hires.</p>
+</div>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-sm font-bold text-slate-900">New Cohort: October 2026</h3>
+<p class="text-xs text-slate-500">3 New Team Members Enrolled</p>
+</div>
+<span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">75% Completed</span>
+</div>
+<div class="space-y-3 pt-2">
+<div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>
+<div>
+<p class="text-xs font-semibold text-slate-800">Day 1: Workspace & Tools Provisioning</p>
+<p class="text-[10px] text-slate-500">Google Workspace, Slack, GitHub, Figma access</p>
+</div>
+</div>
+<span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Done</span>
+</div>
+<div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>
+<div>
+<p class="text-xs font-semibold text-slate-800">Day 7: Founder Culture & Product Overview</p>
+<p class="text-[10px] text-slate-500">1-on-1 intro session with CEO and product roadmap review</p>
+</div>
+</div>
+<span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Done</span>
+</div>
+<div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<i class="fa-solid fa-spinner text-indigo-600 animate-spin text-base"></i>
+<div>
+<p class="text-xs font-semibold text-slate-800">Day 30: First Feature Commit & Code Review</p>
+<p class="text-[10px] text-slate-500">Ship first user-facing improvement under mentor supervision</p>
+</div>
+</div>
+<span class="text-[10px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">In Progress</span>
+</div>
+</div>
+</div>
+</div>
+`;
+}
+// LEAVE MANAGEMENT
+function renderLeaves(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Leave Management</h2>
+<p class="text-xs text-slate-500">Apply for leaves or manage pending team requests.</p>
+</div>
+<button onclick="openLeaveModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm">+ Apply Leave</button>
+</div>
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<table class="w-full text-left text-xs text-slate-600">
+<thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-100">
+<tr>
+<th class="p-3">Employee</th>
+<th class="p-3">Type</th>
+<th class="p-3">Days</th>
+<th class="p-3">Date</th>
+<th class="p-3">Reason</th>
+<th class="p-3">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+${appState.leaves.map(l => ⁠<tr> <td class="p-3 font-semibold text-slate-800">${l.employee}</td> <td class="p-3">${l.type}</td> <td class="p-3 font-bold">${l.days}</td> <td class="p-3 text-slate-500">${l.date}</td> <td class="p-3">${l.reason}</td> <td class="p-3"> <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${l.status==='Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}"> ${l.status} </span> </td> </tr>⁠).join('')}
+</tbody>
+</table>
+</div>
+</div>
+`;
+}
+function openLeaveModal() {
+const reason = prompt('Enter leave reason:');
+if (reason) {
+appState.leaves.unshift({
+id: Date.now(),
+employee: appState.activeRole === 'employee' ? 'Senior Software Engineer' : 'Team Member',
+type: 'Casual Leave',
+days: 1,
+status: 'Pending',
+date: '2026-11-01',
+reason: reason
+});
+saveState();
+renderApp();
+}
+}
+function approveLeave(id) {
+const leave = appState.leaves.find(l => l.id === id);
+if (leave) {
+leave.status = 'Approved';
+saveState();
+renderApp();
+}
+}
+// REIMBURSEMENTS
+function renderReimbursements(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Reimbursement Claims</h2>
+<p class="text-xs text-slate-500">Track and submit official expense claims.</p>
+</div>
+<button onclick="openClaimModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm">+ New Claim</button>
+</div>
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<table class="w-full text-left text-xs text-slate-600">
+<thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-100">
+<tr>
+<th class="p-3">Employee</th>
+<th class="p-3">Category</th>
+<th class="p-3">Description</th>
+<th class="p-3">Amount</th>
+<th class="p-3">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+${appState.reimbursements.map(r => ⁠<tr> <td class="p-3 font-semibold text-slate-800">${r.employee}</td> <td class="p-3">${r.category}</td> <td class="p-3">${r.desc}</td> <td class="p-3 font-bold text-slate-900">${r.amount}</td> <td class="p-3"> <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${r.status==='Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}"> ${r.status} </span> </td> </tr>⁠).join('')}
+</tbody>
+</table>
+</div>
+</div>
+`;
+}
+function openClaimModal() {
+const desc = prompt('Enter expense description:');
+const amt = prompt('Enter amount (e.g. ₹1,500):');
+if (desc && amt) {
+appState.reimbursements.unshift({
+id: Date.now(),
+employee: 'Active User',
+category: 'General Expense',
+amount: amt,
+status: 'Pending',
+desc: desc
+});
+saveState();
+renderApp();
+}
+}
+function approveClaim(id) {
+const claim = appState.reimbursements.find(r => r.id === id);
+if (claim) {
+claim.status = 'Approved';
+saveState();
+renderApp();
+}
+}
+// REWARDS & CULTURE
+function renderRewards(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Culture & Peer Recognition</h2>
+<p class="text-xs text-slate-500">Celebrate wins and appreciate teammate efforts.</p>
+</div>
+<button onclick="giveShoutout()" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm">+ Give Shoutout</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+${appState.shoutouts.map(s => ⁠<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2"> <div class="flex justify-between items-center"> <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg">${s.badge}</span> <span class="text-[10px] text-slate-400">Recent</span> </div> <p class="text-xs text-slate-700 italic">"${s.text}"</p> <div class="text-[11px] font-medium text-slate-500 pt-2 border-t border-slate-100"> <span class="text-slate-900 font-semibold">${s.from}</span> ➔ <span class="text-slate-900 font-semibold">${s.to}</span> </div> </div>⁠).join('')}
+</div>
+</div>
+`;
+}
+function giveShoutout() {
+const to = prompt('Recipient Name:');
+const text = prompt('Shoutout message:');
+if (to && text) {
+appState.shoutouts.unshift({
+from: appState.activeRole.toUpperCase(),
+to: to,
+badge: '⭐ Star Performer',
+text: text
+});
+saveState();
+renderApp();
+}
+}
+// HELPDESK
+function renderHelpdesk(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-bold text-slate-900">HR & Operations Helpdesk</h2>
+<p class="text-xs text-slate-500">Submit operational queries or tax verification support.</p>
+</div>
+<button onclick="createTicket()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm">+ Raise Ticket</button>
+</div>
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<table class="w-full text-left text-xs text-slate-600">
+<thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-100">
+<tr>
+<th class="p-3">Ticket ID</th>
+<th class="p-3">Raised By</th>
+<th class="p-3">Subject</th>
+<th class="p-3">Priority</th>
+<th class="p-3">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+${appState.tickets.map(t => ⁠<tr> <td class="p-3 font-bold text-indigo-600">#TK-${t.id}</td> <td class="p-3 font-medium text-slate-800">${t.user}</td> <td class="p-3">${t.subject}</td> <td class="p-3"><span class="text-[10px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded">${t.priority}</span></td> <td class="p-3"><span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">${t.status}</span></td> </tr>⁠).join('')}
+</tbody>
+</table>
+</div>
+</div>
+`;
+}
+function createTicket() {
+const subject = prompt('Enter issue subject:');
+if (subject) {
+appState.tickets.unshift({
+id: Math.floor(Math.random() * 900) + 100,
+user: 'Current User',
+subject: subject,
+priority: 'Normal',
+status: 'Open'
+});
+saveState();
+renderApp();
+}
+}
+// CANDIDATE PORTAL VIEW
+function renderCandidatePortal(container) {
+container.innerHTML = `
+<div class="space-y-6">
+<div class="bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-6 rounded-2xl shadow-md">
+<span class="text-xs text-purple-300 font-semibold uppercase tracking-wider">Application Tracking</span>
+<h2 class="text-xl font-bold mt-1">Full Stack Developer Application</h2>
+<p class="text-xs text-purple-200 mt-1">Welcome! Track your recruitment stage and interview updates in real time.</p>
+</div>
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+<h3 class="text-sm font-bold text-slate-900">Recruitment Pipeline Status</h3>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+<span class="text-[10px] font-bold text-emerald-700 uppercase">Stage 1</span>
+<p class="text-xs font-bold text-emerald-900 mt-1">Resume Screening</p>
+<p class="text-[10px] text-emerald-600 mt-1">Cleared on Oct 15</p>
+</div>
+<div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+<span class="text-[10px] font-bold text-emerald-700 uppercase">Stage 2</span>
+<p class="text-xs font-bold text-emerald-900 mt-1">Technical Round</p>
+<p class="text-[10px] text-emerald-600 mt-1">Cleared on Oct 20</p>
+</div>
+<div class="p-4 bg-indigo-50 border border-indigo-200 rounded-xl">
+<span class="text-[10px] font-bold text-indigo-700 uppercase">Stage 3</span>
+<p class="text-xs font-bold text-indigo-900 mt-1">Founder Fitment</p>
+<p class="text-[10px] text-indigo-600 mt-1">Scheduled for Tomorrow</p>
+</div>
+<div class="p-4 bg-slate-50 border border-slate-200 rounded-xl opacity-60">
+<span class="text-[10px] font-bold text-slate-500 uppercase">Stage 4</span>
+<p class="text-xs font-bold text-slate-700 mt-1">Offer Letter</p>
+<p class="text-[10px] text-slate-400 mt-1">Pending stage 3</p>
+</div>
+</div>
+</div>
+</div>
+`;
+}
+// AI ASSISTANT FUNCTIONS
+function openAiAssistant() {
+document.getElementById('aiModal').classList.remove('hidden');
+}
+function closeAiAssistant() {
+document.getElementById('aiModal').classList.add('hidden');
+}
+function sendAiQuery() {
+const input = document.getElementById('aiInput');
+const query = input.value.trim();
+if (!query) return;
+const chatBox = document.getElementById('aiChatBox');
+chatBox.innerHTML += ⁠<div class="flex justify-end"> <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none text-xs max-w-[80%] shadow-sm"> ${query} </div> </div>⁠;
+input.value = '';
+chatBox.scrollTop = chatBox.scrollHeight;
+setTimeout(() => {
+let answer = "I can help with that! In Saarthi People OS, you can submit claims under Reimbursements, track leave balances, or explore early-stage startup frameworks in the Founders' Playbook.";
+if (query.toLowerCase().includes('leave')) {
+answer = "To apply for leave, navigate to the Leave Management tab in your side navigation bar and click on '+ Apply Leave'.";
+} else if (query.toLowerCase().includes('esop') || query.toLowerCase().includes('equity')) {
+answer = "According to the Founders' Playbook: Standard startup equity vesting uses a 4-year schedule with a 1-year cliff, reserving 10-12% pool for early talent.";
+}
+chatBox.innerHTML += ⁠<div class="flex justify-start"> <div class="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm space-y-1"> <p class="font-bold text-[10px] text-indigo-600">Saarthi AI</p> <p>${answer}</p> </div> </div>⁠;
+chatBox.scrollTop = chatBox.scrollHeight;
+}, 500);
+}
+</script>
+</body>
+</html>
